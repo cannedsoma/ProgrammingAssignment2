@@ -1,15 +1,39 @@
-## Put comments here that give an overall description of what your
-## functions do
+## The first function creates a list of functions that cache a matrix input,
+## creating a function list for the second function to interact with.
+## The second function calls on the sub-functions of the first function
+## to either solve the matrix and cache it or pull already cached data.
 
-## Write a short comment describing this function
+## Creates a list of functions that: store a matrix, retrieve a matrix, store an
+## inversed matrix or retrieve an inversed matrix.
 
 makeCacheMatrix <- function(x = matrix()) {
-
+  m <- NULL
+  set <- function(y) {
+    x <<- y
+    m <<- NULL
+  }
+  get <- function() x
+  setsolve <- function(c) {m <<- c}
+  getsolve <- function() m
+  list(set = set, get = get,
+       setsolve = setsolve,
+       getsolve = getsolve)
 }
 
 
-## Write a short comment describing this function
+## The function solves a matrix and caches it, but only if there is not already
+## an object in the cache.
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+  m <- x$getsolve()
+  if(!is.null(m)) {
+    message("getting cached data")
+    return(m)
+  }
+  data <- x$get()
+  c <- solve(data, ...)
+  x$setsolve(c)
+  c
 }
+  
+## Return a matrix that is the inverse of 'x'
